@@ -92,3 +92,22 @@ codesk permissions --prompt
 Then enable the relevant binary or terminal in System Settings > Privacy & Security > Accessibility.
 
 Screenshots may also require Screen Recording permission.
+
+## Codex Plugin
+
+This repo includes a local Codex plugin at:
+
+```sh
+plugins/codesk-control
+```
+
+It exposes the `codesk` binary as MCP tools such as `codesk_state`, `codesk_quick`, `codesk_paste`, `codesk_press`, and `codesk_menu`, plus a skill that tells Codex to prefer Codesk Control for macOS desktop control before Computer Use, osascript, or pixel clicking.
+
+To make it available to future Codex sessions:
+
+```sh
+swift build -c release
+scripts/install-codesk-plugin.sh
+```
+
+Restart Codex after installing so the plugin and MCP tools are discovered.
