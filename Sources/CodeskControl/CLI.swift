@@ -14,7 +14,9 @@ struct CLI {
         case "help", "--help", "-h":
             printHelp()
         case "version", "--version":
-            print("codesk 0.1.0")
+            print("codesk 0.2.0")
+        case "mcp":
+            try MCPServer().run()
         case "selftest":
             try SelfTest.run()
         case "doctor", "permissions":
@@ -113,9 +115,7 @@ struct CLI {
 
     private func runQuick(_ args: [String]) throws {
         if args.isEmpty || args == ["list"] || args == ["--list"] {
-            for alias in QuickAliases.all.sorted(by: { $0.name < $1.name }) {
-                print("\(alias.name.padding(toLength: 28, withPad: " ", startingAt: 0)) \(alias.chord.padding(toLength: 18, withPad: " ", startingAt: 0)) \(alias.description)")
-            }
+            print(QuickAliases.listText())
             return
         }
 
@@ -190,7 +190,7 @@ struct CLI {
         }
 
         let value = try textFromArguments(valueParts, purpose: "wait value")
-        try Waiter().wait(condition: condition, value: value, timeout: timeout, interval: interval)
+        print(try Waiter().wait(condition: condition, value: value, timeout: timeout, interval: interval))
     }
 
     private func runFind(_ args: [String]) throws {
@@ -234,7 +234,7 @@ struct CLI {
 
     private func printHelp() {
         print("""
-        codesk 0.1.0
+        codesk 0.2.0
 
         Fast macOS control from text and shortcuts.
 
@@ -255,6 +255,7 @@ struct CLI {
           codesk menu "File > Save"
           codesk screenshot [path.png]
           codesk permissions [--prompt]
+          codesk mcp
           codesk selftest
 
         Chords:

@@ -9,10 +9,10 @@ The intended behavior is simple:
 3. Use Accessibility labels for menus and buttons.
 4. Take screenshots only when text and Accessibility are not enough.
 
-The MCP server is dependency-free Node.js and calls the release binary at:
+The MCP server runs inside the native Swift binary:
 
 ```sh
-../../.build/release/codesk
+../../.build/release/codesk mcp
 ```
 
 from the plugin directory.
@@ -22,4 +22,3 @@ Build the binary before enabling the plugin:
 ```sh
 swift build -c release
 ```
-

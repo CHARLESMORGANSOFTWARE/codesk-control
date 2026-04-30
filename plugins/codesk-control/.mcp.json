@@ -1,14 +1,11 @@
 {
   "mcpServers": {
     "codesk-control": {
-      "command": "node",
+      "command": "./mcp/codesk-mcp.sh",
       "args": [
-        "./mcp/server.mjs"
+        "mcp"
       ],
-      "cwd": ".",
-      "env": {
-        "CODESK_BIN": "../../.build/release/codesk"
-      }
+      "cwd": "."
     }
   }
 }

@@ -278,9 +278,9 @@ class McpClient {
   }
 
   async start() {
-    this.child = spawn("/bin/zsh", ["-lc", "node ./mcp/server.mjs"], {
+    this.child = spawn("./mcp/codesk-mcp.sh", ["mcp"], {
       cwd: this.cwd,
-      env: { ...process.env, CODESK_BIN: "../../.build/release/codesk" },
+      env: process.env,
       stdio: ["pipe", "pipe", "pipe"]
     });
     this.child.stdout.setEncoding("utf8");

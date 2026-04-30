@@ -1,6 +1,6 @@
 {
   "name": "codesk-control",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fast macOS control for Codex using text state, keyboard shortcuts, Accessibility actions, and screenshot fallback. Prefer this before Computer Use or osascript for Mac desktop control.",
   "author": {
     "name": "Charles Morgan and Codex"

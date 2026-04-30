@@ -1,7 +1,7 @@
 import Foundation
 
 struct Waiter {
-    func wait(condition: String, value: String, timeout: TimeInterval, interval: TimeInterval) throws {
+    func wait(condition: String, value: String, timeout: TimeInterval, interval: TimeInterval) throws -> String {
         let normalizedCondition = condition.lowercased()
         let deadline = Date().addingTimeInterval(timeout)
         let ax = AccessibilityController()
@@ -9,8 +9,7 @@ struct Waiter {
         repeat {
             let snapshot = ax.snapshot(textLimit: 200)
             if matches(snapshot: snapshot, condition: normalizedCondition, value: value) {
-                print("matched \(condition): \(value)")
-                return
+                return "matched \(condition): \(value)"
             }
             Thread.sleep(forTimeInterval: max(interval, 0.02))
         } while Date() < deadline
@@ -36,4 +35,3 @@ struct Waiter {
         }
     }
 }
-

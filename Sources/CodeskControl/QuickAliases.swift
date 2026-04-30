@@ -67,6 +67,14 @@ enum QuickAliases {
         throw CommandError("unknown quick alias: \(requested). Run `codesk q list`.", exitCode: 64)
     }
 
+    static func listText() -> String {
+        all.sorted(by: { $0.name < $1.name })
+            .map {
+                "\($0.name.padding(toLength: 28, withPad: " ", startingAt: 0)) \($0.chord.padding(toLength: 18, withPad: " ", startingAt: 0)) \($0.description)"
+            }
+            .joined(separator: "\n")
+    }
+
     private static func canonical(_ value: String) -> String {
         value.split(separator: ".").map { String($0).aliasComparable }.joined(separator: ".")
     }
@@ -82,4 +90,3 @@ enum QuickAliases {
         return nil
     }
 }
-
