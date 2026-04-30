@@ -111,3 +111,14 @@ scripts/install-codesk-plugin.sh
 ```
 
 Restart Codex after installing so the plugin and MCP tools are discovered.
+
+## Benchmarking
+
+Create a speed and behavior baseline against legacy control paths:
+
+```sh
+swift build -c release
+scripts/benchmark-control.mjs
+```
+
+The benchmark compares Codesk CLI, Codesk MCP, AppleScript/`osascript`, and screenshot capture, and records a live inventory of running Codex-related systems. See [benchmarks/README.md](benchmarks/README.md).
