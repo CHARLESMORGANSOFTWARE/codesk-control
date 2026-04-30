@@ -15,6 +15,10 @@ let package = Package(
         .executableTarget(
             name: "CodeskControl"
         ),
+        .testTarget(
+            name: "CodeskControlTests",
+            dependencies: ["CodeskControl"]
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

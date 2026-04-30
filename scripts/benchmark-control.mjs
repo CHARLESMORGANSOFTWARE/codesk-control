@@ -22,7 +22,7 @@ async function main() {
   const metadata = {
     benchmark: "codesk-control-baseline",
     startedAt: startedAt.toISOString(),
-    host: os.hostname(),
+    host: options.includeHost ? os.hostname() : "<redacted>",
     platform: process.platform,
     arch: process.arch,
     node: process.version,
@@ -131,7 +131,8 @@ function parseArgs(args) {
     iterations: 12,
     warmup: 3,
     textLimit: 40,
-    skipScreenshot: false
+    skipScreenshot: false,
+    includeHost: false
   };
 
   for (let i = 0; i < args.length; i += 1) {
@@ -150,8 +151,9 @@ function parseArgs(args) {
     else if (arg === "--text-limit") parsed.textLimit = Number(readValue());
     else if (arg.startsWith("--text-limit=")) parsed.textLimit = Number(arg.slice("--text-limit=".length));
     else if (arg === "--skip-screenshot") parsed.skipScreenshot = true;
+    else if (arg === "--include-host") parsed.includeHost = true;
     else if (arg === "--help" || arg === "-h") {
-      console.log(`Usage: scripts/benchmark-control.mjs [--iterations n] [--warmup n] [--text-limit n] [--skip-screenshot]`);
+      console.log(`Usage: scripts/benchmark-control.mjs [--iterations n] [--warmup n] [--text-limit n] [--skip-screenshot] [--include-host]`);
       process.exit(0);
     } else {
       throw new Error(`Unknown option: ${arg}`);
@@ -364,7 +366,7 @@ async function collectLiveSystems() {
     { name: "codex_app", pattern: /\/Applications\/Codex\.app/i },
     { name: "computer_use_mcp", pattern: /SkyComputerUseClient.*\bmcp\b/i },
     { name: "webtool_mcp", pattern: /codex-web-mcp\.mjs/i },
-    { name: "codesk_mcp", pattern: /codesk-control\/mcp\/server\.mjs/i },
+    { name: "codesk_mcp", pattern: /(?:codesk-mcp\.sh|\/codesk\b.*\bmcp\b)/i },
     { name: "telecodex_bridge", pattern: /Telecodex.*bridge|telecodex_bridge/i },
     { name: "chrome_remote_debugging", pattern: /Google Chrome.*remote-debugging-port/i },
     { name: "osascript", pattern: /\bosascript\b/i },
@@ -540,7 +542,9 @@ function redactCommand(command, args) {
 
 function redactProcessLine(line) {
   return line
+    .replaceAll(repoRoot, "<repo>")
     .replaceAll(os.homedir(), "~")
+    .replace(/\/Volumes\/[^\s]+(?:\/[^\s]+)*/g, "<volume-path>")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 220);

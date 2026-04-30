@@ -69,7 +69,7 @@ final class MCPServer {
             return [
                 "protocolVersion": params["protocolVersion"] as? String ?? "2024-11-05",
                 "capabilities": ["tools": [:]],
-                "serverInfo": ["name": "codesk-control", "version": "0.2.0"]
+                "serverInfo": ["name": "codesk-control", "version": CodeskVersion.current]
             ]
         case "ping", "logging/setLevel":
             return [:]

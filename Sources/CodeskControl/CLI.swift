@@ -14,7 +14,7 @@ struct CLI {
         case "help", "--help", "-h":
             printHelp()
         case "version", "--version":
-            print("codesk 0.2.0")
+            print(CodeskVersion.display)
         case "mcp":
             try MCPServer().run()
         case "selftest":
@@ -234,7 +234,7 @@ struct CLI {
 
     private func printHelp() {
         print("""
-        codesk 0.2.0
+        \(CodeskVersion.display)
 
         Fast macOS control from text and shortcuts.
 

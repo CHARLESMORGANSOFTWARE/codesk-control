@@ -4,10 +4,18 @@ Codesk Control is a CLI-first macOS control surface for Codex-style agents. It f
 
 The executable is `codesk`.
 
-## Build
+## Requirements
+
+- macOS 13 or newer.
+- Swift 6.3 or newer.
+- Xcode for `swift test` with Swift Testing.
+- Node.js for the optional benchmark script.
+
+## Build and Test
 
 ```sh
 swift build
+swift test
 swift run codesk selftest
 ```
 
@@ -21,6 +29,13 @@ Install the debug binary somewhere on your `PATH` if you want:
 
 ```sh
 cp .build/debug/codesk /usr/local/bin/codesk
+```
+
+Build the optimized binary for local use or packaging:
+
+```sh
+swift build -c release
+cp .build/release/codesk /usr/local/bin/codesk
 ```
 
 ## Model
@@ -114,6 +129,14 @@ scripts/install-codesk-plugin.sh
 
 Restart Codex after installing so the plugin and MCP tools are discovered.
 
+The plugin launcher looks for the binary in this order:
+
+1. `CODESK_BIN`, when set.
+2. `.build/release/codesk`.
+3. `.build/debug/codesk`.
+4. `bin/codesk` from a release archive.
+5. `codesk` on `PATH`.
+
 ## Benchmarking
 
 Create a speed and behavior baseline against legacy control paths:
@@ -124,3 +147,24 @@ scripts/benchmark-control.mjs
 ```
 
 The benchmark compares Codesk CLI, Codesk MCP, AppleScript/`osascript`, and screenshot capture, and records a live inventory of running Codex-related systems. See [benchmarks/README.md](benchmarks/README.md).
+
+Generated benchmark results are ignored by git because they can contain local process and machine details.
+
+## Release
+
+Run the local release gate:
+
+```sh
+scripts/release-check.sh
+```
+
+That runs tests, builds the release binary, runs `codesk selftest`, and writes a versioned archive plus SHA-256 checksum to `dist/`.
+
+To publish through GitHub Actions:
+
+```sh
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+The release workflow packages the archive and creates or updates the GitHub release for the pushed tag.

@@ -23,9 +23,9 @@ Useful options:
 scripts/benchmark-control.mjs --iterations 30 --warmup 5
 scripts/benchmark-control.mjs --skip-screenshot
 scripts/benchmark-control.mjs --text-limit 80
+scripts/benchmark-control.mjs --include-host
 ```
 
 Results are written to `benchmarks/results/<timestamp>-baseline.json` and `.md`.
 
-The benchmark redacts home-directory paths and stores behavior summaries instead of full UI text so results are useful without becoming a transcript of the screen.
-
+The benchmark redacts hostnames by default, redacts home/repo/volume paths in process examples, and stores behavior summaries instead of full UI text so results are useful without becoming a transcript of the screen. Generated result files are intentionally ignored by git.

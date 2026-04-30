@@ -22,3 +22,5 @@ Build the binary before enabling the plugin:
 ```sh
 swift build -c release
 ```
+
+For release archives, the launcher also accepts `CODESK_BIN`, `../../bin/codesk`, or `codesk` on `PATH`.
