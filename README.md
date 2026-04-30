@@ -7,7 +7,7 @@ The executable is `codesk`.
 ## Requirements
 
 - macOS 13 or newer.
-- Swift 6.3 or newer.
+- Swift 6.1 or newer.
 - Xcode for `swift test` with Swift Testing.
 - Node.js for the optional benchmark script.
 
