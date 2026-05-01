@@ -21,8 +21,7 @@ Local note: this machine did not have `pdflatex`, `latexmk`, `tectonic`, or `bib
 Suggested arXiv metadata:
 
 - Title: `Codesk Control: Text-First macOS Desktop Control for Low-Latency AI Agents`
-- Authors: `Charles E. Morgan IV and Codex`
+- Authors: `Charles E Morgan IV`
 - Primary category: `cs.HC` or `cs.AI`
 - Cross-list candidates: `cs.SE`, `cs.RO`
 - Abstract: use the abstract from `codesk-control.tex`.
-

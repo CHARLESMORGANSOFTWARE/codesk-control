@@ -8,9 +8,9 @@ No local PDF was compiled in this environment because no TeX engine was installe
 
 Suggested arXiv metadata:
 Title: Codesk Control: Text-First macOS Desktop Control for Low-Latency AI Agents
-Authors: Charles E. Morgan IV and Codex
+Authors: Charles E Morgan IV
+Affiliation: Independent Researcher
 Primary category: cs.HC or cs.AI
 Cross-list candidates: cs.SE, cs.RO
 
 Use paper/abstract.txt as the abstract field.
-
