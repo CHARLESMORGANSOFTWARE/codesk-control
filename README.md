@@ -6,9 +6,7 @@ The executable is `codesk`.
 
 ## Product Demo
 
-[![Watch the Codesk Control product promo](docs/assets/codesk-control-product-promo.jpg)](docs/assets/codesk-control-product-promo.mp4)
-
-Watch the short product promo: [codesk-control-product-promo.mp4](docs/assets/codesk-control-product-promo.mp4).
+Watch/download the short product promo: [codesk-control-product-promo.mp4](docs/assets/codesk-control-product-promo.mp4).
 
 ## Requirements
 
