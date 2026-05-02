@@ -9,6 +9,8 @@ The intended behavior is simple:
 3. Use Accessibility labels for menus and buttons.
 4. Take screenshots only when text and Accessibility are not enough.
 
+Codesk Control is for native macOS control, not browser page DOM automation. When Browser Use or DOM web tools are available, use them for page inspection, extraction, clicks, form entry, waits, and screenshots. Reserve Codesk for browser chrome, app launch/activation, opening external URLs, menus, permissions, or recovery when the DOM path is unavailable.
+
 The MCP server runs inside the native Swift binary:
 
 ```sh

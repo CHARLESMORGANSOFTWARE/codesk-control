@@ -307,7 +307,7 @@ enum MCPToolDefinitions {
         [
             tool(
                 "codesk_state",
-                "Preferred first step for inspecting macOS UI state. Returns front app, bundle id, window title, focused element, selected text, and visible Accessibility text.",
+                "Preferred first step for inspecting native macOS UI state. Returns front app, bundle id, window title, focused element, selected text, and visible Accessibility text. Do not use for browser page DOM work when Browser Use or DOM web tools are available.",
                 properties: [
                     "json": ["type": "boolean", "description": "Return JSON. Defaults to true."],
                     "limit": ["type": "number", "description": "Maximum visible text lines to collect.", "default": 120]
@@ -315,7 +315,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_text",
-                "Return visible Accessibility text from the frontmost macOS window. Use after navigation to confirm what the app shows without screenshots.",
+                "Return visible Accessibility text from the frontmost native macOS window. Use after native app navigation to confirm what the app shows without screenshots. Prefer DOM extraction for browser pages.",
                 properties: [
                     "limit": ["type": "number", "description": "Maximum visible text lines to collect.", "default": 120]
                 ]
@@ -328,7 +328,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_open",
-                "Open a URL or filesystem path with macOS Launch Services.",
+                "Open a URL or filesystem path with macOS Launch Services. For browser page interaction after opening a URL, prefer Browser Use or DOM web tools.",
                 properties: ["target": ["type": "string", "description": "URL or file/folder path to open."]],
                 required: ["target"]
             ),
@@ -346,14 +346,14 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_quick",
-                "Send an app-aware quick shortcut alias. Preferred over raw key chords for common actions like address, new_tab, find, quick_open, command_palette, goto_folder, and terminal.",
+                "Send an app-aware quick shortcut alias for native app or browser chrome actions like address, new_tab, quick_open, command_palette, goto_folder, and terminal. Do not use for page-level browser DOM actions when DOM tools are available.",
                 properties: ["alias": ["type": "string", "description": "Quick alias name, for example address, safari.address, or finder.goto_folder."]],
                 required: ["alias"]
             ),
             tool("codesk_quick_list", "List available Codesk quick shortcut aliases."),
             tool(
                 "codesk_paste",
-                "Paste text into the focused macOS field using the clipboard and cmd+v. Preferred for long text.",
+                "Paste text into the focused native macOS field using the clipboard and cmd+v. Preferred for long native text entry. For browser form fields, prefer DOM typing or setValue when available.",
                 properties: [
                     "text": ["type": "string", "description": "Text to paste."],
                     "leaveClipboard": ["type": "boolean", "description": "Leave pasted text on the clipboard.", "default": false]
@@ -371,7 +371,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_wait",
-                "Wait for macOS UI state to match text, title, app, or focused element. Use after actions to confirm completion.",
+                "Wait for native macOS UI state to match text, title, app, or focused element. Use after native actions to confirm completion. Prefer DOM waits for browser pages.",
                 properties: [
                     "condition": ["type": "string", "enum": ["text", "title", "app", "focus"], "description": "Condition type to wait for."],
                     "value": ["type": "string", "description": "Expected value or substring."],
@@ -382,13 +382,13 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_find",
-                "Find visible Accessibility elements matching text in the front window. Use before pressing ambiguous controls.",
+                "Find visible native Accessibility elements matching text in the front window. Use before pressing ambiguous native controls. Prefer DOM querying for browser page elements.",
                 properties: ["text": ["type": "string", "description": "Text to find."]],
                 required: ["text"]
             ),
             tool(
                 "codesk_press",
-                "Press a visible Accessibility element by label, title, value, or description.",
+                "Press a visible native Accessibility element by label, title, value, or description. Prefer DOM clicks for browser page elements.",
                 properties: ["label": ["type": "string", "description": "Visible label to press."]],
                 required: ["label"]
             ),

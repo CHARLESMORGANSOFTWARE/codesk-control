@@ -97,7 +97,7 @@ cp .build/release/codesk /usr/local/bin/codesk
 
 ## Model
 
-Use this ladder:
+Use this ladder for native macOS app work:
 
 1. Text/CLI first: `codesk state`, `codesk text`, `codesk open`, app CLIs, files, URLs.
 2. Keyboard shortcuts second: `codesk key cmd+l`, `codesk q address`.
@@ -105,6 +105,8 @@ Use this ladder:
 4. Screenshots last: `codesk screenshot`.
 
 This is the same control ladder described in the paper: inspect with text, move with shortcuts, act on named UI targets, and reserve screenshots for visual or inaccessible interfaces.
+
+For browser page work, prefer Browser Use or DOM web tools when they are available. Codesk can launch or focus the browser, open an external URL, operate browser chrome, choose menus, or recover from OS-level focus problems; it should not be the default path for page DOM inspection, extraction, clicks, form entry, waits, or screenshots.
 
 ## Commands
 
@@ -130,7 +132,7 @@ codesk mcp
 
 ## Examples
 
-Open a page in Safari:
+Open a page in Safari when you need native browser chrome control:
 
 ```sh
 codesk app Safari
@@ -156,7 +158,7 @@ Save through the menu:
 codesk menu "File > Save"
 ```
 
-Use cases include browser navigation, editor/IDE control, document save/export flows, desktop state monitoring, and human-auditable automation traces such as `pressed AXButton title=Save` instead of `clicked x=844 y=613`.
+Use cases include browser chrome navigation, editor/IDE control, document save/export flows, desktop state monitoring, and human-auditable automation traces such as `pressed AXButton title=Save` instead of `clicked x=844 y=613`.
 
 ## Permissions
 
@@ -178,7 +180,7 @@ This repo includes a local Codex plugin at:
 plugins/codesk-control
 ```
 
-It exposes the `codesk` binary as MCP tools such as `codesk_state`, `codesk_quick`, `codesk_paste`, `codesk_press`, and `codesk_menu`, plus a skill that tells Codex to prefer Codesk Control for macOS desktop control before Computer Use, osascript, or pixel clicking.
+It exposes the `codesk` binary as MCP tools such as `codesk_state`, `codesk_quick`, `codesk_paste`, `codesk_press`, and `codesk_menu`, plus a skill that tells Codex to prefer Codesk Control for native macOS desktop control before Computer Use, osascript, or pixel clicking. The plugin guidance explicitly leaves browser page DOM actions to Browser Use or DOM web tools when they are available.
 
 The plugin launches `codesk mcp`, a native stdio MCP server, so repeated tool calls do not spawn a new `codesk` process.
 
