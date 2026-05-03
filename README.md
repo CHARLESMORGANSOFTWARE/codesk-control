@@ -100,7 +100,7 @@ cp .build/release/codesk /usr/local/bin/codesk
 Use this ladder for native macOS app work:
 
 1. Fast CLI action first when the command is explicit: `codesk app`, `codesk open`, app CLIs, files, and native app URLs.
-2. Keyboard shortcuts and quick aliases second: `codesk q address`, `codesk key cmd+l`.
+2. Keyboard shortcuts and quick aliases second: `codesk q chrome.address`, `codesk q vscode.quick_open`, `codesk key cmd+l`.
 3. Text-state checks when state is uncertain or verification matters: `codesk state`, `codesk text`.
 4. Accessibility actions next: `codesk press Save`, `codesk menu "File > Export..."`.
 5. Screenshots last: `codesk screenshot`.
@@ -110,6 +110,15 @@ This is the same control ladder described in the paper: move through direct CLI 
 For Chrome activation, prefer the exact app name or bundle id: `codesk app "Google Chrome"` or `codesk app com.google.Chrome`. The shorter `chrome` alias resolves to the same bundle.
 
 For Codex Web or browser page work, prefer Codex Web, Browser Use, or DOM web tools when they are available. Codesk can launch or focus a native browser, open an external URL in that browser when explicitly requested, operate browser chrome, choose menus, or recover from OS-level focus problems; it should not be the default path for page DOM inspection, extraction, clicks, form entry, waits, screenshots, or localhost/file:// website testing.
+
+Avoid these common routing traps:
+
+- If the task context says the in-app browser is open, includes a current URL, mentions Codex Web, Browser Use, DOM, localhost, or asks for browser control, keep page work on the browser/DOM surface.
+- If `codesk_state` reports front app `Codex` while the target is a browser page, treat that as a surface mismatch and use browser tools or explicit OS focus recovery.
+- If `codesk_find` or `codesk_press` misses once on browser page text, switch to DOM/page tooling instead of trying more label variants.
+- Use scoped quick aliases such as `chrome.address`, `safari.address`, and `vscode.quick_open` when the front app is uncertain. Bare aliases such as `address` are app-aware conveniences only after the front app is known.
+- Keep `codesk_wait` short for native app confirmation. Do not wait on exact browser page titles or page text when DOM waits are available.
+- Keep `codesk_raw` for troubleshooting the CLI itself, not as the fallback path for browser page automation.
 
 ## Commands
 
@@ -135,14 +144,13 @@ codesk mcp
 
 ## Examples
 
-Open a page in Safari when you need native browser chrome control:
+Open a page in Safari when the user explicitly wants native browser chrome control and DOM tooling is unavailable:
 
 ```sh
 codesk app Safari
-codesk q address
+codesk q safari.address
 codesk paste "https://example.com"
 codesk key enter
-codesk wait title Example
 codesk text
 ```
 

@@ -4,6 +4,8 @@ All notable changes to Codesk Control will be documented in this file.
 
 ## [Unreleased]
 
+- Add stricter routing guidance for browser/page work so Codesk Control stays on native macOS surfaces unless explicit OS recovery is needed.
+- Improve ambiguous quick-alias errors with scoped suggestions such as `chrome.address` and `safari.address`.
 - Resolve common app aliases through exact bundle identifiers and verify app activation reaches the frontmost app.
 - Add persistent MCP shortcut-registry timing to the benchmark harness.
 - Tighten Codex Web and browser DOM boundaries in plugin metadata, skill guidance, and MCP tool descriptions.

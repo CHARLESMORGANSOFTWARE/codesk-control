@@ -32,4 +32,21 @@ struct MCPToolDefinitionsTests {
             #expect(descriptions[name]?.contains("Codex Web") == true, "missing Codex Web boundary warning for \(name)")
         }
     }
+
+    @Test func toolDescriptionsSteerCommonMisroutes() {
+        let descriptions: [String: String] = Dictionary(uniqueKeysWithValues: MCPToolDefinitions.tools.compactMap { tool -> (String, String)? in
+            guard let name = tool["name"] as? String,
+                  let description = tool["description"] as? String else {
+                return nil
+            }
+            return (name, description)
+        })
+
+        #expect(descriptions["codesk_quick"]?.contains("Use scoped aliases") == true)
+        #expect(descriptions["codesk_quick"]?.contains("chrome.address") == true)
+        #expect(descriptions["codesk_wait"]?.contains("avoid exact browser page titles/text") == true)
+        #expect(descriptions["codesk_find"]?.contains("after one miss") == true)
+        #expect(descriptions["codesk_press"]?.contains("after one miss") == true)
+        #expect(descriptions["codesk_raw"]?.contains("Troubleshooting only") == true)
+    }
 }

@@ -62,6 +62,10 @@ enum QuickAliases {
             if matches.count == 1 {
                 return matches[0]
             }
+            if matches.count > 1 {
+                let choices = matches.map(\.name).sorted().joined(separator: ", ")
+                throw CommandError("ambiguous quick alias: \(requested). Use a scoped alias such as \(choices).", exitCode: 64)
+            }
         }
 
         throw CommandError("unknown quick alias: \(requested). Run `codesk q list`.", exitCode: 64)

@@ -15,6 +15,15 @@ Do not start a Codex Web or browser task with `codesk_state`, `codesk_text`, `co
 
 If a Codex Web or DOM web action fails, prefer a web/DOM retry or a clear error before falling back to Codesk. Fall back to Codesk for page-level browser actions only when the user asks for native macOS control or the DOM/browser tool is unavailable.
 
+Use these routing guardrails:
+
+- If the prompt says the in-app browser is open, includes a current URL, mentions Codex Web, Browser Use, DOM, localhost, or asks to use browser control, do not use Codesk for page inspection, page waits, page clicks, or page text entry.
+- If a browser-looking `codesk_find` or `codesk_press` misses once, stop trying label variants and switch to the browser/DOM surface.
+- Use `codesk_wait` for native UI confirmation only. Keep waits short, and do not wait on exact browser page titles or web text when DOM waits are available.
+- Use scoped quick aliases such as `chrome.address`, `safari.address`, and `vscode.quick_open` when the front app is uncertain. Bare aliases such as `address` are only safe after confirming the front app.
+- Use `codesk_open` for an explicit URL only when the user asked to open it in a native macOS app or the browser DOM bridge is unavailable. Do not paste a URL into an address bar when a higher-level browser navigation tool can express the step.
+- Use `codesk_raw` only for troubleshooting the Codesk CLI itself, not as a recovery loop for browser page work.
+
 Use this ladder for native app work:
 
 1. Use Codesk CLI actions and quick aliases first: `codesk_app`, `codesk_open`, `codesk_quick`, `codesk_key`, `codesk_keys`, and `codesk_paste`.
@@ -31,8 +40,8 @@ Prefer `codesk_paste` over `codesk_type` for long text. Use `codesk_type` only w
 
 Prefer app-aware quick aliases when available:
 
-- `codesk_quick` with `alias: "address"` in Safari or Chrome.
-- `codesk_quick` with `alias: "quick_open"` in VS Code.
-- `codesk_quick` with `alias: "goto_folder"` in Finder.
+- `codesk_quick` with `alias: "chrome.address"` or `alias: "safari.address"` for native browser chrome.
+- `codesk_quick` with `alias: "vscode.quick_open"` in VS Code.
+- `codesk_quick` with `alias: "finder.goto_folder"` in Finder.
 
 Avoid destructive shortcuts unless the user explicitly asked for them or the current workflow clearly requires them.

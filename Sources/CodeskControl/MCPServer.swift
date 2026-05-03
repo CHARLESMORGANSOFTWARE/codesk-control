@@ -307,7 +307,7 @@ enum MCPToolDefinitions {
         [
             tool(
                 "codesk_state",
-                "Preferred first step for inspecting native macOS UI state. Returns front app, bundle id, window title, focused element, selected text, and visible Accessibility text. Do not use for Codex Web or browser page DOM work when Browser Use or DOM web tools are available.",
+                "Preferred first step for inspecting native macOS UI state. Returns front app, bundle id, window title, focused element, selected text, and visible Accessibility text. Do not use for Codex Web or browser page DOM work when Browser Use or DOM web tools are available; if the target is a browser page and the front app is Codex, switch to a browser/DOM tool or explicit OS focus recovery.",
                 properties: [
                     "json": ["type": "boolean", "description": "Return JSON. Defaults to true."],
                     "limit": ["type": "number", "description": "Maximum visible text lines to collect.", "default": 120]
@@ -328,7 +328,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_open",
-                "Open a URL or filesystem path with macOS Launch Services for native macOS workflows. Do not use for Codex Web navigation, localhost tests, file:// website tests, or browser page interaction when Browser Use or DOM web tools are available.",
+                "Open a URL or filesystem path with macOS Launch Services for native macOS workflows. Prefer this over address-bar paste/enter when the user explicitly wants a native app or external URL opened. Do not use for Codex Web navigation, localhost tests, file:// website tests, or browser page interaction when Browser Use or DOM web tools are available.",
                 properties: ["target": ["type": "string", "description": "URL or file/folder path to open."]],
                 required: ["target"]
             ),
@@ -346,8 +346,8 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_quick",
-                "Send an app-aware quick shortcut alias through the fast Codesk CLI path for native app or explicit browser chrome actions like address, new_tab, quick_open, command_palette, goto_folder, and terminal. Prefer quick aliases over osascript, Accessibility, screenshots, or pixel control when a shortcut can express the action. Do not use for Codex Web or page-level browser DOM actions when DOM tools are available.",
-                properties: ["alias": ["type": "string", "description": "Quick alias name, for example address, safari.address, or finder.goto_folder."]],
+                "Send an app-aware quick shortcut alias through the fast Codesk CLI path for native app or explicit browser chrome actions. Use scoped aliases such as chrome.address, safari.address, vscode.quick_open, or finder.goto_folder when the front app is uncertain; bare aliases such as address or new_tab are only safe after the front app is known. Prefer quick aliases over osascript, Accessibility, screenshots, or pixel control when a shortcut can express the native action. Do not use for Codex Web or page-level browser DOM actions when DOM tools are available.",
+                properties: ["alias": ["type": "string", "description": "Quick alias name, for example chrome.address, safari.address, or finder.goto_folder."]],
                 required: ["alias"]
             ),
             tool("codesk_quick_list", "List available Codesk quick shortcut aliases."),
@@ -371,7 +371,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_wait",
-                "Wait for native macOS UI state to match text, title, app, or focused element. Use after native actions to confirm completion. Prefer Codex Web, Browser Use, or DOM waits for browser pages.",
+                "Wait for native macOS UI state to match text, title, app, or focused element. Use after native actions to confirm completion. Keep native waits short and avoid exact browser page titles/text; prefer Codex Web, Browser Use, or DOM waits for browser pages.",
                 properties: [
                     "condition": ["type": "string", "enum": ["text", "title", "app", "focus"], "description": "Condition type to wait for."],
                     "value": ["type": "string", "description": "Expected value or substring."],
@@ -382,13 +382,13 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_find",
-                "Find visible native Accessibility elements matching text in the front window. Use before pressing ambiguous native controls. Prefer Codex Web, Browser Use, or DOM querying for browser page elements.",
+                "Find visible native Accessibility elements matching text in the front window. Use before pressing ambiguous native controls. Prefer Codex Web, Browser Use, or DOM querying for browser page elements; after one miss on browser/page text, switch surfaces instead of trying label variants.",
                 properties: ["text": ["type": "string", "description": "Text to find."]],
                 required: ["text"]
             ),
             tool(
                 "codesk_press",
-                "Press a visible native Accessibility element by label, title, value, or description. Prefer Codex Web, Browser Use, or DOM clicks for browser page elements.",
+                "Press a visible native Accessibility element by label, title, value, or description. Prefer Codex Web, Browser Use, or DOM clicks for browser page elements; after one miss on browser/page text, switch surfaces instead of trying label variants.",
                 properties: ["label": ["type": "string", "description": "Visible label to press."]],
                 required: ["label"]
             ),
@@ -410,7 +410,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_raw",
-                "Advanced escape hatch: run a raw codesk CLI command as an argument array, without a shell.",
+                "Advanced escape hatch: run a raw codesk CLI command as an argument array, without a shell. Troubleshooting only: prefer typed Codesk tools, and do not use raw calls to bypass Codex Web, Browser Use, or DOM routing for browser page work.",
                 properties: [
                     "args": ["type": "array", "items": ["type": "string"], "description": "Arguments after the codesk executable."],
                     "timeoutMs": ["type": "number", "description": "Timeout in milliseconds.", "default": 10_000]

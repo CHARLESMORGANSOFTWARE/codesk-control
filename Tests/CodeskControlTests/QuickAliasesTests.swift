@@ -24,10 +24,13 @@ struct QuickAliasesTests {
 
     @Test func rejectsAmbiguousUnscopedAlias() {
         do {
-            _ = try QuickAliases.resolve("find", frontAppName: nil)
+            _ = try QuickAliases.resolve("address", frontAppName: nil)
             Issue.record("Expected alias resolution to throw")
         } catch let error as CommandError {
             #expect(error.exitCode == 64)
+            #expect(error.message.contains("ambiguous quick alias: address"))
+            #expect(error.message.contains("chrome.address"))
+            #expect(error.message.contains("safari.address"))
         } catch {
             Issue.record("Unexpected error: \(error)")
         }
