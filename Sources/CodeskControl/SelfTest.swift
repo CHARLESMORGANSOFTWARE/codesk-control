@@ -15,6 +15,13 @@ enum SelfTest {
         let vscodePalette = try QuickAliases.resolve("command-palette", frontAppName: "Visual Studio Code")
         try expect(vscodePalette.name == "vscode.command_palette", "VS Code aliases should accept dash spelling")
 
+        let chromeTarget = ApplicationLaunchTarget.resolve("chrome")
+        try expect(chromeTarget.launchName == "Google Chrome", "Chrome app alias should resolve to Google Chrome")
+        try expect(chromeTarget.bundleIdentifier == "com.google.Chrome", "Chrome app alias should use the Chrome bundle id")
+
+        let bundleTarget = ApplicationLaunchTarget.resolve("com.google.Chrome")
+        try expect(bundleTarget.bundleIdentifier == "com.google.Chrome", "Bundle identifiers should launch with open -b")
+
         print("selftest: ok")
     }
 
@@ -24,4 +31,3 @@ enum SelfTest {
         }
     }
 }
-

@@ -69,6 +69,13 @@ async function main() {
   }));
 
   benchmarks.push(await benchmarkMcpState());
+  benchmarks.push(await benchmarkMcpTool({
+    name: "codesk_mcp_quick_list",
+    category: "after: persistent MCP shortcut registry",
+    toolName: "codesk_quick_list",
+    arguments: {},
+    behavior: summarizeMcpTextResult
+  }));
 
   benchmarks.push(await benchmarkCommand({
     name: "osascript_front_app",
@@ -234,6 +241,16 @@ async function benchmarkScreenshot() {
 }
 
 async function benchmarkMcpState() {
+  return benchmarkMcpTool({
+    name: "codesk_mcp_state",
+    category: "after: persistent MCP tool call",
+    toolName: "codesk_state",
+    arguments: { json: true, limit: options.textLimit },
+    behavior: summarizeMcpTextResult
+  });
+}
+
+async function benchmarkMcpTool(config) {
   const client = new McpClient(pluginRoot);
   await client.start();
   try {
@@ -248,21 +265,21 @@ async function benchmarkMcpState() {
     let behavior = {};
     for (let i = 0; i < options.warmup + options.iterations; i += 1) {
       const sample = await timeAsync(() => client.request("tools/call", {
-        name: "codesk_state",
-        arguments: { json: true, limit: options.textLimit }
+        name: config.toolName,
+        arguments: config.arguments
       }));
       if (i >= options.warmup) {
         samples.push(sample);
         if (Object.keys(behavior).length === 0) {
-          behavior = summarizeMcpTextResult(sample.result);
+          behavior = config.behavior?.(sample.result) ?? {};
         }
       }
     }
 
     return {
-      name: "codesk_mcp_state",
-      category: "after: persistent MCP tool call",
-      command: "MCP tools/call codesk_state",
+      name: config.name,
+      category: config.category,
+      command: `MCP tools/call ${config.toolName}`,
       stats: summarizeSamples(samples),
       behavior
     };

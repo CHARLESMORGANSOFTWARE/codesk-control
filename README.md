@@ -44,8 +44,8 @@ The benchmark measures latency and structured observation coverage. In the saved
 | Capability | MCP tools | What agents use it for |
 | --- | --- | --- |
 | Inspect UI state | `codesk_state`, `codesk_text` | Read front app, bundle id, PID presence, window title, focused element, selected text, permission state, and visible Accessibility text. |
-| Move between apps and targets | `codesk_app`, `codesk_open` | Activate or launch apps, open URLs, and open files/folders through macOS Launch Services. |
-| Drive common shortcuts | `codesk_quick`, `codesk_quick_list`, `codesk_key`, `codesk_keys` | Use app-aware aliases such as browser address bars, VS Code quick open, Finder Go to Folder, or explicit shortcut chords. |
+| Move between apps and targets | `codesk_app`, `codesk_open` | Activate or launch apps, open files/folders, and open URLs through Launch Services for native macOS workflows. |
+| Drive common shortcuts | `codesk_quick`, `codesk_quick_list`, `codesk_key`, `codesk_keys` | Use app-aware aliases such as explicit browser chrome controls, VS Code quick open, Finder Go to Folder, or shortcut chords. |
 | Enter text | `codesk_paste`, `codesk_type` | Paste longer content with clipboard restoration, or type key-by-key when paste is rejected. |
 | Wait and locate | `codesk_wait`, `codesk_find` | Wait for text/title/app/focus changes and find visible Accessibility elements before acting. |
 | Act semantically | `codesk_press`, `codesk_menu` | Press named buttons/controls and choose menu paths such as `File > Save`. |
@@ -55,7 +55,7 @@ The benchmark measures latency and structured observation coverage. In the saved
 
 - Native Swift CLI and native stdio MCP server: `codesk mcp`.
 - Structured UI snapshots: front app, bundle id, process id, window title, focused element, selected text, permission state, and visible Accessibility text.
-- App-aware quick shortcuts: browser address bars, Finder Go to Folder, VS Code quick open/command palette, terminal actions, and more.
+- App-aware quick shortcuts: explicit browser chrome controls, Finder Go to Folder, VS Code quick open/command palette, terminal actions, and more.
 - Semantic actions: press labeled controls and select menu paths such as `File > Save`.
 - Fast paste/type helpers with clipboard restoration.
 - Screenshot fallback when text and Accessibility state are insufficient.
@@ -99,14 +99,17 @@ cp .build/release/codesk /usr/local/bin/codesk
 
 Use this ladder for native macOS app work:
 
-1. Text/CLI first: `codesk state`, `codesk text`, `codesk open`, app CLIs, files, URLs.
-2. Keyboard shortcuts second: `codesk key cmd+l`, `codesk q address`.
-3. Accessibility actions third: `codesk press Save`, `codesk menu "File > Export..."`.
-4. Screenshots last: `codesk screenshot`.
+1. Fast CLI action first when the command is explicit: `codesk app`, `codesk open`, app CLIs, files, and native app URLs.
+2. Keyboard shortcuts and quick aliases second: `codesk q address`, `codesk key cmd+l`.
+3. Text-state checks when state is uncertain or verification matters: `codesk state`, `codesk text`.
+4. Accessibility actions next: `codesk press Save`, `codesk menu "File > Export..."`.
+5. Screenshots last: `codesk screenshot`.
 
-This is the same control ladder described in the paper: inspect with text, move with shortcuts, act on named UI targets, and reserve screenshots for visual or inaccessible interfaces.
+This is the same control ladder described in the paper: move through direct CLI and shortcut paths, confirm with text state when needed, act on named UI targets, and reserve screenshots for visual or inaccessible interfaces.
 
-For browser page work, prefer Browser Use or DOM web tools when they are available. Codesk can launch or focus the browser, open an external URL, operate browser chrome, choose menus, or recover from OS-level focus problems; it should not be the default path for page DOM inspection, extraction, clicks, form entry, waits, or screenshots.
+For Chrome activation, prefer the exact app name or bundle id: `codesk app "Google Chrome"` or `codesk app com.google.Chrome`. The shorter `chrome` alias resolves to the same bundle.
+
+For Codex Web or browser page work, prefer Codex Web, Browser Use, or DOM web tools when they are available. Codesk can launch or focus a native browser, open an external URL in that browser when explicitly requested, operate browser chrome, choose menus, or recover from OS-level focus problems; it should not be the default path for page DOM inspection, extraction, clicks, form entry, waits, screenshots, or localhost/file:// website testing.
 
 ## Commands
 
@@ -180,7 +183,7 @@ This repo includes a local Codex plugin at:
 plugins/codesk-control
 ```
 
-It exposes the `codesk` binary as MCP tools such as `codesk_state`, `codesk_quick`, `codesk_paste`, `codesk_press`, and `codesk_menu`, plus a skill that tells Codex to prefer Codesk Control for native macOS desktop control before Computer Use, osascript, or pixel clicking. The plugin guidance explicitly leaves browser page DOM actions to Browser Use or DOM web tools when they are available.
+It exposes the `codesk` binary as MCP tools such as `codesk_state`, `codesk_quick`, `codesk_paste`, `codesk_press`, and `codesk_menu`, plus a skill that tells Codex to prefer Codesk Control for native macOS desktop control before Computer Use, osascript, or pixel clicking. The plugin guidance explicitly leaves Codex Web and browser page DOM actions to Codex Web, Browser Use, or DOM web tools when they are available.
 
 The plugin launches `codesk mcp`, a native stdio MCP server, so repeated tool calls do not spawn a new `codesk` process.
 

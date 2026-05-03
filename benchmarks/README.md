@@ -5,7 +5,7 @@
 It measures:
 
 - Codesk native state and text commands.
-- Codesk through the plugin MCP server.
+- Codesk through the persistent plugin MCP server, including state reads and shortcut registry calls.
 - Legacy AppleScript/`osascript` front-app and window-title queries.
 - `screencapture` as the substrate for screenshot/vision workflows.
 - A live process inventory for currently running Codex, Computer Use, Webtool, Telecodex, and browser systems.

@@ -1,7 +1,7 @@
 {
   "name": "codesk-control",
-  "version": "0.2.0",
-  "description": "Fast macOS control for Codex using text state, keyboard shortcuts, Accessibility actions, and screenshot fallback. Prefer this before Computer Use or osascript for Mac desktop control.",
+  "version": "0.2.1",
+  "description": "Fast native macOS control for Codex using text state, keyboard shortcuts, Accessibility actions, and screenshot fallback. Use Codex Web, Browser Use, or DOM tools for browser page work.",
   "author": {
     "name": "Charles Morgan and Codex"
   },
@@ -17,8 +17,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Codesk Control",
-    "shortDescription": "Control macOS quickly through text and shortcuts",
-    "longDescription": "Codesk Control gives Codex a CLI-first macOS control path. It inspects the front app as text, sends native keyboard shortcuts, pastes text, activates apps, selects menus, presses Accessibility elements, and falls back to screenshots only when needed.",
+    "shortDescription": "Control native macOS apps through text and shortcuts",
+    "longDescription": "Codesk Control gives Codex a CLI-first native macOS control path. It inspects the front app as text, sends native keyboard shortcuts, pastes text, activates apps, selects menus, presses Accessibility elements, and falls back to screenshots only when needed. Browser page work belongs to Codex Web, Browser Use, or DOM tools.",
     "developerName": "Charles Morgan and Codex",
     "category": "Productivity",
     "capabilities": [
@@ -28,7 +28,7 @@
     ],
     "defaultPrompt": [
       "Inspect the current Mac app",
-      "Open Safari and go to a URL",
+      "Control browser chrome when explicitly needed",
       "Use the current app through shortcuts"
     ],
     "brandColor": "#0F766E",

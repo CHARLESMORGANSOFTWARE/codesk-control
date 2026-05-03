@@ -19,4 +19,18 @@ struct SupportTests {
     @Test func menuComparableNormalizesWhitespaceAndEllipsis() {
         #expect("  Export   As…  ".menuComparable == "export as...")
     }
+
+    @Test func applicationLaunchTargetResolvesChromeAlias() {
+        let target = ApplicationLaunchTarget.resolve("chrome")
+
+        #expect(target.launchName == "Google Chrome")
+        #expect(target.bundleIdentifier == "com.google.Chrome")
+    }
+
+    @Test func applicationLaunchTargetKeepsBundleIdentifiers() {
+        let target = ApplicationLaunchTarget.resolve("com.google.Chrome")
+
+        #expect(target.launchName == "com.google.Chrome")
+        #expect(target.bundleIdentifier == "com.google.Chrome")
+    }
 }

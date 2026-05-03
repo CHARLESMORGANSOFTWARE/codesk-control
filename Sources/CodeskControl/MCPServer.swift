@@ -128,8 +128,8 @@ final class MCPServer {
             return ax.snapshot(textLimit: limit).visibleText.joined(separator: "\n")
 
         case "codesk_app":
-            try ApplicationController().activate(requiredString(arguments, "name"))
-            return "ok"
+            let target = try ApplicationController().activate(requiredString(arguments, "name"))
+            return "activated \(target.description)"
 
         case "codesk_open":
             try ApplicationController().openTarget(requiredString(arguments, "target"))
@@ -307,7 +307,7 @@ enum MCPToolDefinitions {
         [
             tool(
                 "codesk_state",
-                "Preferred first step for inspecting native macOS UI state. Returns front app, bundle id, window title, focused element, selected text, and visible Accessibility text. Do not use for browser page DOM work when Browser Use or DOM web tools are available.",
+                "Preferred first step for inspecting native macOS UI state. Returns front app, bundle id, window title, focused element, selected text, and visible Accessibility text. Do not use for Codex Web or browser page DOM work when Browser Use or DOM web tools are available.",
                 properties: [
                     "json": ["type": "boolean", "description": "Return JSON. Defaults to true."],
                     "limit": ["type": "number", "description": "Maximum visible text lines to collect.", "default": 120]
@@ -315,45 +315,45 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_text",
-                "Return visible Accessibility text from the frontmost native macOS window. Use after native app navigation to confirm what the app shows without screenshots. Prefer DOM extraction for browser pages.",
+                "Return visible Accessibility text from the frontmost native macOS window. Use after native app navigation to confirm what the app shows without screenshots. Prefer Codex Web, Browser Use, or DOM extraction for browser pages.",
                 properties: [
                     "limit": ["type": "number", "description": "Maximum visible text lines to collect.", "default": 120]
                 ]
             ),
             tool(
                 "codesk_app",
-                "Activate or launch a macOS app by name or bundle id. Preferred before sending app-specific shortcuts.",
-                properties: ["name": ["type": "string", "description": "Application name or bundle id."]],
+                "Activate or launch a native macOS app by exact name or bundle id using the Codesk CLI path. Prefer this over osascript or pixel control for app focus, but do not use it just to prepare Codex Web, Browser Use, or browser page DOM work.",
+                properties: ["name": ["type": "string", "description": "Application name or bundle id. For Chrome use Google Chrome or com.google.Chrome; the chrome alias is also resolved."]],
                 required: ["name"]
             ),
             tool(
                 "codesk_open",
-                "Open a URL or filesystem path with macOS Launch Services. For browser page interaction after opening a URL, prefer Browser Use or DOM web tools.",
+                "Open a URL or filesystem path with macOS Launch Services for native macOS workflows. Do not use for Codex Web navigation, localhost tests, file:// website tests, or browser page interaction when Browser Use or DOM web tools are available.",
                 properties: ["target": ["type": "string", "description": "URL or file/folder path to open."]],
                 required: ["target"]
             ),
             tool(
                 "codesk_key",
-                "Send one native keyboard shortcut to macOS, such as cmd+l, cmd+shift+p, enter, escape, or option+left.",
+                "Send one native keyboard shortcut to macOS, such as cmd+l, cmd+shift+p, enter, escape, or option+left. Do not use for Codex Web or browser page DOM actions when DOM tools are available.",
                 properties: ["chord": ["type": "string", "description": "Shortcut chord."]],
                 required: ["chord"]
             ),
             tool(
                 "codesk_keys",
-                "Send a short sequence of native keyboard shortcuts to macOS.",
+                "Send a short sequence of native keyboard shortcuts to macOS. Do not use for Codex Web or browser page DOM actions when DOM tools are available.",
                 properties: ["chords": ["type": "array", "items": ["type": "string"], "description": "Shortcut chords to send in order."]],
                 required: ["chords"]
             ),
             tool(
                 "codesk_quick",
-                "Send an app-aware quick shortcut alias for native app or browser chrome actions like address, new_tab, quick_open, command_palette, goto_folder, and terminal. Do not use for page-level browser DOM actions when DOM tools are available.",
+                "Send an app-aware quick shortcut alias through the fast Codesk CLI path for native app or explicit browser chrome actions like address, new_tab, quick_open, command_palette, goto_folder, and terminal. Prefer quick aliases over osascript, Accessibility, screenshots, or pixel control when a shortcut can express the action. Do not use for Codex Web or page-level browser DOM actions when DOM tools are available.",
                 properties: ["alias": ["type": "string", "description": "Quick alias name, for example address, safari.address, or finder.goto_folder."]],
                 required: ["alias"]
             ),
             tool("codesk_quick_list", "List available Codesk quick shortcut aliases."),
             tool(
                 "codesk_paste",
-                "Paste text into the focused native macOS field using the clipboard and cmd+v. Preferred for long native text entry. For browser form fields, prefer DOM typing or setValue when available.",
+                "Paste text into the focused native macOS field using the clipboard and cmd+v. Preferred for long native text entry. For Codex Web or browser form fields, prefer DOM typing or setValue when available.",
                 properties: [
                     "text": ["type": "string", "description": "Text to paste."],
                     "leaveClipboard": ["type": "boolean", "description": "Leave pasted text on the clipboard.", "default": false]
@@ -362,7 +362,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_type",
-                "Type text key by key into the focused macOS field. Use when paste is rejected or literal typing matters.",
+                "Type text key by key into the focused macOS field. Use when paste is rejected or literal typing matters. For Codex Web or browser DOM fields, prefer DOM typing when available.",
                 properties: [
                     "text": ["type": "string", "description": "Text to type."],
                     "delayMs": ["type": "number", "description": "Delay between characters in milliseconds.", "default": 3]
@@ -371,7 +371,7 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_wait",
-                "Wait for native macOS UI state to match text, title, app, or focused element. Use after native actions to confirm completion. Prefer DOM waits for browser pages.",
+                "Wait for native macOS UI state to match text, title, app, or focused element. Use after native actions to confirm completion. Prefer Codex Web, Browser Use, or DOM waits for browser pages.",
                 properties: [
                     "condition": ["type": "string", "enum": ["text", "title", "app", "focus"], "description": "Condition type to wait for."],
                     "value": ["type": "string", "description": "Expected value or substring."],
@@ -382,25 +382,25 @@ enum MCPToolDefinitions {
             ),
             tool(
                 "codesk_find",
-                "Find visible native Accessibility elements matching text in the front window. Use before pressing ambiguous native controls. Prefer DOM querying for browser page elements.",
+                "Find visible native Accessibility elements matching text in the front window. Use before pressing ambiguous native controls. Prefer Codex Web, Browser Use, or DOM querying for browser page elements.",
                 properties: ["text": ["type": "string", "description": "Text to find."]],
                 required: ["text"]
             ),
             tool(
                 "codesk_press",
-                "Press a visible native Accessibility element by label, title, value, or description. Prefer DOM clicks for browser page elements.",
+                "Press a visible native Accessibility element by label, title, value, or description. Prefer Codex Web, Browser Use, or DOM clicks for browser page elements.",
                 properties: ["label": ["type": "string", "description": "Visible label to press."]],
                 required: ["label"]
             ),
             tool(
                 "codesk_menu",
-                "Select an app menu path through Accessibility, for example File > Save or View > Reload Page.",
+                "Select an app menu path through Accessibility, for example File > Save or View > Reload Page. Do not use for Codex Web or browser page DOM actions when DOM tools are available.",
                 properties: ["path": ["type": "string", "description": "Menu path separated by >."]],
                 required: ["path"]
             ),
             tool(
                 "codesk_screenshot",
-                "Capture a screenshot only when text and Accessibility state are insufficient.",
+                "Capture a native macOS screenshot only when text and Accessibility state are insufficient. For Codex Web or browser page screenshots, prefer web/DOM screenshot tools.",
                 properties: ["path": ["type": "string", "description": "Optional PNG output path."]]
             ),
             tool(

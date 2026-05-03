@@ -4,6 +4,9 @@ All notable changes to Codesk Control will be documented in this file.
 
 ## [Unreleased]
 
+- Resolve common app aliases through exact bundle identifiers and verify app activation reaches the frontmost app.
+- Add persistent MCP shortcut-registry timing to the benchmark harness.
+- Tighten Codex Web and browser DOM boundaries in plugin metadata, skill guidance, and MCP tool descriptions.
 - Add GitHub CI and release packaging.
 - Add unit tests for key parsing, quick aliases, support parsing, and MCP tool definitions.
 - Keep generated benchmark outputs out of source control.

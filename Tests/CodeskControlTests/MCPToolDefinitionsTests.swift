@@ -19,7 +19,7 @@ struct MCPToolDefinitionsTests {
     }
 
     @Test func browserSensitiveToolsAdvertiseDomBoundary() {
-        let descriptions = Dictionary(uniqueKeysWithValues: MCPToolDefinitions.tools.compactMap { tool in
+        let descriptions: [String: String] = Dictionary(uniqueKeysWithValues: MCPToolDefinitions.tools.compactMap { tool -> (String, String)? in
             guard let name = tool["name"] as? String,
                   let description = tool["description"] as? String else {
                 return nil
@@ -27,8 +27,9 @@ struct MCPToolDefinitionsTests {
             return (name, description)
         })
 
-        for name in ["codesk_state", "codesk_text", "codesk_open", "codesk_quick", "codesk_paste", "codesk_wait", "codesk_find", "codesk_press"] {
+        for name in ["codesk_state", "codesk_text", "codesk_app", "codesk_open", "codesk_key", "codesk_keys", "codesk_quick", "codesk_paste", "codesk_type", "codesk_wait", "codesk_find", "codesk_press", "codesk_menu", "codesk_screenshot"] {
             #expect(descriptions[name]?.contains("DOM") == true, "missing DOM boundary warning for \(name)")
+            #expect(descriptions[name]?.contains("Codex Web") == true, "missing Codex Web boundary warning for \(name)")
         }
     }
 }
